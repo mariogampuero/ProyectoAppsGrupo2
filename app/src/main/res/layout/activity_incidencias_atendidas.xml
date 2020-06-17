@@ -5,22 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_pucp1"
-    tools:context=".activity.usuariopucp.MainUsuarioPucpActivity">
+    tools:context=".activity.usuariopucp.IncidenciasAtendidasActivity">
 
     <TextView
-        android:id="@+id/titulo_listaincidencias"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lista de Incidencias Pendientes"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo_usupucp"
-        app:layout_constraintVertical_bias="0.03" />
-
-    <TextView
-        android:id="@+id/titulo_usupucp"
+        android:id="@+id/titulo_usupucp3"
         android:layout_width="290dp"
         android:layout_height="28dp"
         android:text="SISTEMA DE INCIDENCIAS PUCP"
@@ -33,4 +21,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05" />
 
+    <TextView
+        android:id="@+id/titulo_incidenciasatendidas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="628dp"
+        android:text="Lista de Incidencias Atendidas"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titulo_usupucp"
+        app:layout_constraintVertical_bias="0.03" />
 </androidx.constraintlayout.widget.ConstraintLayout>
