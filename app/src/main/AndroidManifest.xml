@@ -25,17 +25,16 @@
             android:value="@string/map_api_key" />
 
 
-        <activity android:name=".activity.DetallesIncidenciaActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".activity.RegistroActivity" />
-        <activity android:name=".activity.InicioActivity" />
-        <activity android:name=".activity.NuevaIncidenciaActivity"></activity>
+        <activity android:name=".activity.NuevaIncidenciaActivity" />
+        <activity android:name=".activity.DetallesIncidenciaActivity"></activity>
         <activity android:name=".activity.LoginActivity" />
 
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.InicioActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

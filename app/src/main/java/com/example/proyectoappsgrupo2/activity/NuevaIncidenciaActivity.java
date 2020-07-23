@@ -24,7 +24,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
     }
 
     public void botonAtrasAppBar(MenuItem menu){
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, InicioActivity.class);
         startActivity(i);
     }
 }
