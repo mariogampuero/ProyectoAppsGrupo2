@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.proyectoappsgrupo2.R;
 
-public class DetallesIncidenciaActivity extends AppCompatActivity {
+public class RegistroActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalles_incidencia);
+        setContentView(R.layout.activity_registro);
     }
 }
