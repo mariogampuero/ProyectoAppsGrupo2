@@ -180,7 +180,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
             fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-
+                    Toast.makeText(NuevaIncidenciaActivity.this, "Ocurrió un error al obtener la ubicación", Toast.LENGTH_SHORT).show();
                 }
             });
 
