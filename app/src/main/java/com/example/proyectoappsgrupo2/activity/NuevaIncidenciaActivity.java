@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -91,8 +92,8 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (latLng != null){
-                    final String autor = "Pepito";
-                    final int estado = 0;
+                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                    final String autor = firebaseAuth.getCurrentUser().getUid();
                     final String ImageUploadId = databaseReference.push().getKey();
                     //StorageReference filePath = storageReference.child("fotos").child(uri.getLastPathSegment());
                     StorageReference filePath = storageReference.child("fotos").child(ImageUploadId);
@@ -102,8 +103,10 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             String descri = descripcion.getText().toString().trim();
                             String title = titulo.getText().toString().trim();
-                            Toast.makeText(NuevaIncidenciaActivity.this, "Se subio la incidencia exitosamente", Toast.LENGTH_SHORT).show();
+
+                            Toast.makeText(NuevaIncidenciaActivity.this, "Se subió la incidencia exitosamente", Toast.LENGTH_SHORT).show();
                             Incidencia imageUploadInfo = new Incidencia(taskSnapshot.getUploadSessionUri().toString(), descri, title, autor, "pendiente", latLng.latitude, latLng.longitude);
+
                             //String ImageUploadId = databaseReference.push().getKey();
                             databaseReference.child(ImageUploadId).setValue(imageUploadInfo);
                         }
