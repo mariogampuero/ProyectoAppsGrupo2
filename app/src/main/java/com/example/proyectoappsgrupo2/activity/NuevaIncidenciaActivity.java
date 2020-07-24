@@ -94,19 +94,23 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
                 final int estado = 0;
                 final double lat = 13.12;
                 final double lon = 15.18;
-                StorageReference filePath = storageReference.child("fotos").child(uri.getLastPathSegment());
+                final String ImageUploadId = databaseReference.push().getKey();
+                //StorageReference filePath = storageReference.child("fotos").child(uri.getLastPathSegment());
+                StorageReference filePath = storageReference.child("fotos").child(ImageUploadId);
 
                 filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         String descri = descripcion.getText().toString().trim();
                         String title = titulo.getText().toString().trim();
-                        Toast.makeText(NuevaIncidenciaActivity.this, "Se cargo la foto exitosamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NuevaIncidenciaActivity.this, "Se subio la incidencia exitosamente", Toast.LENGTH_SHORT).show();
                         Incidencia imageUploadInfo = new Incidencia(taskSnapshot.getUploadSessionUri().toString(), descri, title, autor, estado, lat, lon );
-                        String ImageUploadId = databaseReference.push().getKey();
+                        //String ImageUploadId = databaseReference.push().getKey();
                         databaseReference.child(ImageUploadId).setValue(imageUploadInfo);
                     }
                 });
+                Intent intent = new Intent(NuevaIncidenciaActivity.this,InicioActivity.class);
+                startActivity(intent);
             }
         });
 
