@@ -16,7 +16,7 @@
         android:title="Item"
         app:showAsAction="always" />
     <item
-        android:id="@+id/username"
+        android:id="@+id/usernameInicio"
         android:orderInCategory="2"
         android:title="username"
         app:showAsAction="always" />
