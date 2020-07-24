@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectoappsgrupo2.R;
 import com.example.proyectoappsgrupo2.entity.Incidencia;
 
+import java.util.ArrayList;
+
 public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.InicioViewHolder> {
 
-    private Incidencia[] listaIncidencias;
+    private ArrayList<Incidencia> listaIncidencias;
     private Context context;
 
-    public InicioListAdapter(Incidencia[] incidenciaData, Context context){
+    public InicioListAdapter(ArrayList<Incidencia> incidenciaData, Context context){
         this.listaIncidencias = incidenciaData;
         this.context = context;
     }
@@ -70,18 +72,18 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
 
     @Override
     public void onBindViewHolder(@NonNull InicioViewHolder holder, int position) {
-        String nombre = listaIncidencias[position].getNombre();
-        String estado = listaIncidencias[position].getEstado();
+        String nombre = listaIncidencias.get(position).getNombre();
+        String estado = listaIncidencias.get(position).getEstado();
 
         holder.textView1.setText(nombre);
         holder.textView2.setText(estado);
-        holder.incidencia = listaIncidencias[position];
+        holder.incidencia = listaIncidencias.get(position);
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listaIncidencias.size();
     }
 
 

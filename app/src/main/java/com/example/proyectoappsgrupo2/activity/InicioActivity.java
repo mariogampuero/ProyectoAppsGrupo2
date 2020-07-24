@@ -23,6 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class InicioActivity extends AppCompatActivity {
 
     DatabaseReference databaseReference;
@@ -45,12 +49,15 @@ public class InicioActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 //Lista de Incidencias
-                final Incidencia listaincidencias = dataSnapshot.getValue(Incidencia.class);
+                final ArrayList<Incidencia> listaincidencias = new ArrayList<Incidencia>();
 
                 //Incidencia una por una
                 for (DataSnapshot child : dataSnapshot.getChildren()){
                     Incidencia incidenciaIndividual = child.getValue(Incidencia.class);
+                    listaincidencias.add(incidenciaIndividual);
                 }
+
+
 
                 new Response.Listener<String>(){
 
@@ -61,7 +68,7 @@ public class InicioActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         DtoListaIncidencias dtoListaIncidencias = gson.fromJson(response,DtoListaIncidencias.class);
 
-                        InicioListAdapter adapter = new InicioListAdapter(listaincidencias,InicioActivity.class);
+                        InicioListAdapter adapter = new InicioListAdapter(listaincidencias,InicioActivity.this);
 
                         RecyclerView recyclerView = findViewById(R.id.recyclerView);
                         recyclerView.setAdapter(adapter);
