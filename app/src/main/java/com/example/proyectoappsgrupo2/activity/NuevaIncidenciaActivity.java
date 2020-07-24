@@ -55,7 +55,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
         titulo = (EditText) findViewById(R.id.titleIncidencia);
         descripcion = (EditText) findViewById(R.id.descripcionIncidencia);
         storageReference = FirebaseStorage.getInstance().getReference();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Fotos");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Incidencias");
         btnUpload = (Button) findViewById(R.id.buttonFoto);
         img = (ImageView) findViewById(R.id.fotoIncidencia);
         btnSubirIncidencia = (Button) findViewById(R.id.buttonGuardarIncidencia);
