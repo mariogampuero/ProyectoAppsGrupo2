@@ -2,6 +2,7 @@ package com.example.proyectoappsgrupo2.entity;
 
 public class Incidencia {
 
+
     private String autor;
     private String nombre;
     private String descripcion;
@@ -78,5 +79,13 @@ public class Incidencia {
 
     public void setLongitud(double longitud) {
         this.longitud = longitud;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 }
