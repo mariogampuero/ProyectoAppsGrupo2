@@ -1,12 +1,21 @@
 package com.example.proyectoappsgrupo2.activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +27,10 @@ import android.widget.Toast;
 import com.example.proyectoappsgrupo2.MainActivity;
 import com.example.proyectoappsgrupo2.R;
 import com.example.proyectoappsgrupo2.entity.Incidencia;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,6 +53,9 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
     private ImageView img;
     private Button btnSubirIncidencia;
     private Uri uri;
+    private LatLng latLng;
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -59,7 +75,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
         btnUpload = (Button) findViewById(R.id.buttonFoto);
         img = (ImageView) findViewById(R.id.fotoIncidencia);
         btnSubirIncidencia = (Button) findViewById(R.id.buttonGuardarIncidencia);
-
+        Button btnAgregarGeolocalizacion = (Button) findViewById(R.id.buttonLocal);
 
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -74,27 +90,37 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
         btnSubirIncidencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String autor = "Pepito";
-                final int estado = 0;
-                final double lat = 13.12;
-                final double lon = 15.18;
-                final String ImageUploadId = databaseReference.push().getKey();
-                //StorageReference filePath = storageReference.child("fotos").child(uri.getLastPathSegment());
-                StorageReference filePath = storageReference.child("fotos").child(ImageUploadId);
+                if (latLng != null){
+                    final String autor = "Pepito";
+                    final int estado = 0;
+                    final String ImageUploadId = databaseReference.push().getKey();
+                    //StorageReference filePath = storageReference.child("fotos").child(uri.getLastPathSegment());
+                    StorageReference filePath = storageReference.child("fotos").child(ImageUploadId);
 
-                filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        String descri = descripcion.getText().toString().trim();
-                        String title = titulo.getText().toString().trim();
-                        Toast.makeText(NuevaIncidenciaActivity.this, "Se subio la incidencia exitosamente", Toast.LENGTH_SHORT).show();
-                        Incidencia imageUploadInfo = new Incidencia(taskSnapshot.getUploadSessionUri().toString(), descri, title, autor, estado, lat, lon );
-                        //String ImageUploadId = databaseReference.push().getKey();
-                        databaseReference.child(ImageUploadId).setValue(imageUploadInfo);
-                    }
-                });
-                Intent intent = new Intent(NuevaIncidenciaActivity.this,InicioActivity.class);
-                startActivity(intent);
+                    filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            String descri = descripcion.getText().toString().trim();
+                            String title = titulo.getText().toString().trim();
+                            Toast.makeText(NuevaIncidenciaActivity.this, "Se subio la incidencia exitosamente", Toast.LENGTH_SHORT).show();
+                            Incidencia imageUploadInfo = new Incidencia(taskSnapshot.getUploadSessionUri().toString(), descri, title, autor, estado, latLng.latitude, latLng.longitude);
+                            //String ImageUploadId = databaseReference.push().getKey();
+                            databaseReference.child(ImageUploadId).setValue(imageUploadInfo);
+                        }
+                    });
+                    Intent intent = new Intent(NuevaIncidenciaActivity.this,InicioActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(NuevaIncidenciaActivity.this, "Debe agregar la geolozalización", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        btnAgregarGeolocalizacion.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                obtenerUbicacion();
             }
         });
     }
@@ -115,8 +141,54 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("infoApp", "Permisos concedidos");
+            } else {
+                Log.e("infoApp", "Permisos no concedidos");
+            }
+        }
+    }
+
+
     public void botonAtrasAppBar(MenuItem menu){
         Intent i = new Intent(this, InicioActivity.class);
         startActivity(i);
     }
+
+    public void obtenerUbicacion() {
+        int permission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null){
+                        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        Toast.makeText(NuevaIncidenciaActivity.this, "Se añadió la ubicación", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(NuevaIncidenciaActivity.this, "Ocurrió un error al obtener la ubicación", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+    }
+
+
 }
