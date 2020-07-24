@@ -38,22 +38,23 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
             this.textView2 = itemView.findViewById(R.id.estadoRV);
             this.verMasDetallesRV =itemView.findViewById(R.id.verMasDetallesRV);
 
-            verMasDetallesRV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, DetallesIncidenciaActivity.class);
-                    intent.putExtra("nombre",employee.getFirstName());
-                    intent.putExtra("apellido",employee.getLastName());
-                    intent.putExtra("correo",employee.getEmail());
-                    intent.putExtra("phone",employee.getPhoneNumber());
-                    intent.putExtra("salario",employee.getSalary());
-                    intent.putExtra("comision",employee.getCommissionPct());
-                    intent.putExtra("trabajo",employee.getJobId().getJobId());
-                    intent.putExtra("jefe",employee.getManager().getEmployeeId());
-                    intent.putExtra("departamento",employee.getDepartmentId().getDepartmentId());
-                    context.startActivity(intent);
-                }
-            });
+            try{
+                verMasDetallesRV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, DetallesIncidenciaActivity.class);
+                        intent.putExtra("nombre",incidencia.getNombre());
+                        intent.putExtra("descripcion",incidencia.getDescripcion());
+                        intent.putExtra("autor",incidencia.getAutor());
+                        intent.putExtra("estado",incidencia.getEstado());
+                        intent.putExtra("latitud", incidencia.getLatitud());
+                        intent.putExtra("longitud",incidencia.getLongitud());
+                        context.startActivity(intent);
+                    }
+                });
+            }catch (NullPointerException exception){
+
+            }
 
         }
     }

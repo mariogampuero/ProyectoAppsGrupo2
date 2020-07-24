@@ -2,6 +2,8 @@ package com.example.proyectoappsgrupo2.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +14,14 @@ import android.view.MenuItem;
 import com.android.volley.Response;
 import com.example.proyectoappsgrupo2.MainActivity;
 import com.example.proyectoappsgrupo2.R;
+import com.example.proyectoappsgrupo2.dto.DtoListaIncidencias;
 import com.example.proyectoappsgrupo2.entity.Incidencia;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 public class InicioActivity extends AppCompatActivity {
 
@@ -41,7 +45,7 @@ public class InicioActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 //Lista de Incidencias
-                Incidencia listaincidencias = dataSnapshot.getValue(Incidencia.class);
+                final Incidencia listaincidencias = dataSnapshot.getValue(Incidencia.class);
 
                 //Incidencia una por una
                 for (DataSnapshot child : dataSnapshot.getChildren()){
@@ -53,6 +57,16 @@ public class InicioActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("no se", response);
+
+                        Gson gson = new Gson();
+                        DtoListaIncidencias dtoListaIncidencias = gson.fromJson(response,DtoListaIncidencias.class);
+
+                        InicioListAdapter adapter = new InicioListAdapter(listaincidencias,InicioActivity.class);
+
+                        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(InicioActivity.this));
+
 
                     }
                 };

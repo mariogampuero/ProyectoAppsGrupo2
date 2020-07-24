@@ -7,7 +7,7 @@
     tools:context=".activity.LoginActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/titleDetalles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sistema de Inciendias "
@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.073" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/descripDetalles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PUCP"
@@ -29,11 +29,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/titleDetalles"
         app:layout_constraintVertical_bias="0.011" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/estadoDetalles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Correo Pucp"
@@ -60,7 +60,7 @@
         app:layout_constraintVertical_bias="0.384" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/autorDetalles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Contraseña"
