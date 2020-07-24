@@ -1,12 +1,21 @@
 package com.example.proyectoappsgrupo2.activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +27,10 @@ import android.widget.Toast;
 import com.example.proyectoappsgrupo2.MainActivity;
 import com.example.proyectoappsgrupo2.R;
 import com.example.proyectoappsgrupo2.entity.Incidencia;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,6 +53,9 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
     private ImageView img;
     private Button btnSubirIncidencia;
     private Uri uri;
+    private LatLng latLng;
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -59,7 +75,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
         btnUpload = (Button) findViewById(R.id.buttonFoto);
         img = (ImageView) findViewById(R.id.fotoIncidencia);
         btnSubirIncidencia = (Button) findViewById(R.id.buttonGuardarIncidencia);
-
+        Button btnAgregarGeolocalizacion = (Button) findViewById(R.id.buttonLocal);
 
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +109,13 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
                 });
             }
         });
+
+        btnAgregarGeolocalizacion.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                obtenerUbicacion();
+            }
+        });
     }
 
     @Override
@@ -111,8 +134,54 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("infoApp", "Permisos concedidos");
+            } else {
+                Log.e("infoApp", "Permisos no concedidos");
+            }
+        }
+    }
+
+
     public void botonAtrasAppBar(MenuItem menu){
         Intent i = new Intent(this, InicioActivity.class);
         startActivity(i);
     }
+
+    public void obtenerUbicacion() {
+        int permission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null){
+                        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        Log.d("UBICACIÓN:", Double.toString(location.getLatitude()));
+                    }
+                }
+            });
+
+            fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+    }
+
+
 }
