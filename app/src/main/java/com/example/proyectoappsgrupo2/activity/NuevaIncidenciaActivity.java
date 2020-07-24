@@ -78,7 +78,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
                 final int estado = 0;
                 final double lat = 13.12;
                 final double lon = 15.18;
-                StorageReference filePath = storageReference.child("incidencias").child(uri.getLastPathSegment());
+                StorageReference filePath = storageReference.child("fotos").child(uri.getLastPathSegment());
 
                 filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -112,7 +112,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
     }
 
     public void botonAtrasAppBar(MenuItem menu){
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, InicioActivity.class);
         startActivity(i);
     }
 }
