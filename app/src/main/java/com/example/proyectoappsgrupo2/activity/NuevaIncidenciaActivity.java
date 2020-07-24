@@ -94,7 +94,6 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
                 if (latLng != null){
                     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                     final String autor = firebaseAuth.getCurrentUser().getUid();
-                    final int estado = 0;
                     final String ImageUploadId = databaseReference.push().getKey();
                     //StorageReference filePath = storageReference.child("fotos").child(uri.getLastPathSegment());
                     StorageReference filePath = storageReference.child("fotos").child(ImageUploadId);
@@ -104,8 +103,10 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             String descri = descripcion.getText().toString().trim();
                             String title = titulo.getText().toString().trim();
+
                             Toast.makeText(NuevaIncidenciaActivity.this, "Se subió la incidencia exitosamente", Toast.LENGTH_SHORT).show();
-                            Incidencia imageUploadInfo = new Incidencia(taskSnapshot.getUploadSessionUri().toString(), descri, title, autor, estado, latLng.latitude, latLng.longitude);
+                            Incidencia imageUploadInfo = new Incidencia(taskSnapshot.getUploadSessionUri().toString(), descri, title, autor, "pendiente", latLng.latitude, latLng.longitude);
+
                             //String ImageUploadId = databaseReference.push().getKey();
                             databaseReference.child(ImageUploadId).setValue(imageUploadInfo);
                         }
