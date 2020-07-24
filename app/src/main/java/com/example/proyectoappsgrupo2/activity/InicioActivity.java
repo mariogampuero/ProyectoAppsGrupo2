@@ -57,8 +57,6 @@ public class InicioActivity extends AppCompatActivity {
                     listaincidencias.add(incidenciaIndividual);
                 }
 
-
-
                 new Response.Listener<String>(){
 
                     @Override
@@ -67,6 +65,8 @@ public class InicioActivity extends AppCompatActivity {
 
                         Gson gson = new Gson();
                         DtoListaIncidencias dtoListaIncidencias = gson.fromJson(response,DtoListaIncidencias.class);
+
+                        ArrayList<Incidencia> lista =dtoListaIncidencias.getListaincidencias();
 
                         InicioListAdapter adapter = new InicioListAdapter(listaincidencias,InicioActivity.this);
 
