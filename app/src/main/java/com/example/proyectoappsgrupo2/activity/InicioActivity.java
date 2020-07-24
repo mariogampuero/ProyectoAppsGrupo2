@@ -43,10 +43,13 @@ public class InicioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
+
+        /*
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("Incidencias").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
 
                 //Lista de Incidencias
                 final ArrayList<Incidencia> listaincidencias = new ArrayList<Incidencia>();
@@ -79,14 +82,13 @@ public class InicioActivity extends AppCompatActivity {
                 };
 
 
-
-            }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+         */
 
     }
 
