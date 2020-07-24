@@ -8,12 +8,12 @@ public class Incidencia {
     private double latitud;
     private double longitud;
     private String foto;
-    private int estado;
+    private String estado;
     private String comentario;
 
     public Incidencia(){}
 
-    public Incidencia(String url, String desc, String nombre, String autor,int estado, double lat, double lon) {
+    public Incidencia(String url, String desc, String nombre, String autor,String estado, double lat, double lon) {
         this.nombre = nombre;
         this.autor = autor;
         this.foto = url;
@@ -48,11 +48,11 @@ public class Incidencia {
         this.foto = foto;
     }
 
-    public int getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
