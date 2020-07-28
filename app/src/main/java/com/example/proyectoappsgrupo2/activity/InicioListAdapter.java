@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,11 @@ import java.util.List;
 
 public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.InicioViewHolder> {
 
-    private List<Incidencia> listaIncidencias;
+    private ArrayList<Incidencia> listaIncidencias;
     private Context context;
 
-    public InicioListAdapter(List<Incidencia> incidenciaData, Context context){
+    public InicioListAdapter(ArrayList<Incidencia> incidenciaData, Context context){
+        Log.d("TAGGGG", "adapter initialized");
         this.listaIncidencias = incidenciaData;
         this.context = context;
 
@@ -32,11 +34,11 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
     public static class InicioViewHolder extends RecyclerView.ViewHolder {
         public TextView textView1;
         public TextView textView2;
-        public Button verMasDetallesRV;
+        public ImageButton verMasDetallesRV;
         public Incidencia incidencia;
         Context context;
 
-        public InicioViewHolder(@NonNull View itemView, final Context context ) {
+        public InicioViewHolder(View itemView, final Context context ) {
             super(itemView);
             this.context= context;
             this.textView1 = itemView.findViewById(R.id.nombreIncidenciaRV);
@@ -68,9 +70,11 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
     @NonNull
     @Override
     public InicioViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        Log.d("TAG2222222", "onCreateViewHolder: inside");
+
         View itemView = LayoutInflater.from(context).inflate(R.layout.lista_incidenciasrv, parent, false);
         InicioViewHolder inicioViewHolder = new InicioViewHolder(itemView,context);
-        Log.d("probando5446", "nombrecdcdcd");
         return inicioViewHolder;
 
 
@@ -89,7 +93,11 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
 
     @Override
     public int getItemCount() {
-        return listaIncidencias.size();
+        if (listaIncidencias != null){
+            return listaIncidencias.size();
+        } else {
+            return 0;
+        }
     }
 
 
