@@ -2,16 +2,25 @@ package com.example.proyectoappsgrupo2.entity;
 
 public class Usuario {
 
-    private int uid;
+    private String uid;
     private Integer codigo;
     private String correo;
     private String rol;
 
-    public int getUid() {
+    public Usuario(){}
+
+    public Usuario(String uid, Integer codigo, String correo, String rol) {
+        this.uid = uid;
+        this.codigo = codigo;
+        this.correo = correo;
+        this.rol = rol;
+    }
+
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
