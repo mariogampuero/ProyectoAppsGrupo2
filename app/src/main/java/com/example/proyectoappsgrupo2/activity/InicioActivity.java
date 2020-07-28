@@ -41,10 +41,12 @@ public class InicioActivity extends AppCompatActivity {
     private Menu menu;
     FirebaseAuth firebaseAuth;
     //DatabaseReference databaseReference;
-    private List<Incidencia> listaIncidencias = new ArrayList<> ();;
+    private ArrayList<Incidencia> listaIncidencias = new ArrayList<>();
+
     private Incidencia incidencia = new Incidencia();
     private String est;
     private String nombre;
+    InicioListAdapter inicioListAdapter;
 
 
     @Override
@@ -53,43 +55,7 @@ public class InicioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inicio);
         //listaIncidencias = new ArrayList<> ();
 
-        //mostrarIncidencias();
-        DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
-        DatabaseReference incidenciaRef = FirebaseDatabase.getInstance().getReference().child("Incidencias");
-        //databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        incidenciaRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-
-                    if(keyId.child("autor").getValue().equals("R3MpfReFycYfKhncOwdU96hwmA22")){
-                        nombre = keyId.child("nombre").getValue(String.class);
-                        est = keyId.child("estado").getValue(String.class);
-
-                        incidencia.setNombre(nombre);
-                        incidencia.setEstado(est);
-                        listaIncidencias.add(incidencia);
-
-                        Log.d("probando9", incidencia.getNombre());
-                       // Log.d("probando10", String.valueOf(listaIncidencias.size()));
-                    }
-                }
-                Log.d("probando10", String.valueOf(listaIncidencias.size()));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        Log.d("probandogbgbgbgbgb9", String.valueOf(listaIncidencias.size()));
-        InicioListAdapter inicioListAdapter = new InicioListAdapter(listaIncidencias,InicioActivity.this);
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        Log.d("probandogbgbgbgbgb9", "nombre");
-        recyclerView.setAdapter(inicioListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(InicioActivity.this));
+        mostrarIncidencias();
 
 
 /*
@@ -137,6 +103,53 @@ public class InicioActivity extends AppCompatActivity {
 */
     }
 
+
+
+
+
+    public void mostrarIncidencias (){
+        DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+        DatabaseReference incidenciaRef = FirebaseDatabase.getInstance().getReference().child("Incidencias");
+        //databaseReference = FirebaseDatabase.getInstance().getReference();
+
+
+        incidenciaRef.addValueEventListener(new ValueEventListener() {
+            String title,descrip,aut;
+            int state;
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Incidencia> listita = new ArrayList<>();
+
+                for (DataSnapshot keyId : dataSnapshot.getChildren()){
+
+                    if(keyId.child("autor").getValue().equals("R3MpfReFycYfKhncOwdU96hwmA22")){
+                        nombre = keyId.child("nombre").getValue(String.class);
+                        est = keyId.child("estado").getValue(String.class);
+
+                        incidencia.setNombre(nombre);
+                        incidencia.setEstado(est);
+                        listita.add(incidencia);
+                    }
+                }
+                Log.d("TAG2222222",String.valueOf(listita.size()));
+                inicioListAdapter = new InicioListAdapter(listita,InicioActivity.this);
+                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(InicioActivity.this));
+                recyclerView.setAdapter(inicioListAdapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
