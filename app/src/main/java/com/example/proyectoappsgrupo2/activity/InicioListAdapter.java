@@ -36,16 +36,18 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
         public TextView textView2;
         public ImageButton verMasDetallesRV;
         public Incidencia incidencia;
-        Context context;
+        //Context context;
+
 
         public InicioViewHolder(View itemView, final Context context ) {
+
             super(itemView);
-            this.context= context;
+           // this.context= context;
             this.textView1 = itemView.findViewById(R.id.nombreIncidenciaRV);
             this.textView2 = itemView.findViewById(R.id.estadoRV);
             this.verMasDetallesRV =itemView.findViewById(R.id.verMasDetallesRV);
 
-/*
+/*        
             try{
                 verMasDetallesRV.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -65,6 +67,11 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
             }
 */
         }
+
+        public void asignarDatos(Incidencia incidencia) {
+            textView1.setText(incidencia.getNombre());
+            textView2.setText(incidencia.getEstado());
+        }
     }
 
     @NonNull
@@ -74,20 +81,26 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
         Log.d("TAG2222222", "onCreateViewHolder: inside");
 
         View itemView = LayoutInflater.from(context).inflate(R.layout.lista_incidenciasrv, parent, false);
+
+
         InicioViewHolder inicioViewHolder = new InicioViewHolder(itemView,context);
         return inicioViewHolder;
+
 
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull InicioViewHolder holder, int position) {
-        String nombre = listaIncidencias.get(position).getNombre();
-        String estado = listaIncidencias.get(position).getEstado();
-        Log.d("probando100", nombre);
-        holder.textView1.setText(nombre);
-        holder.textView2.setText(estado);
-        holder.incidencia = listaIncidencias.get(position);
+        //Incidencia inci = listaIncidencias.get(position);
+        //String nombre = listaIncidencias.get(position).getNombre();
+        //String estado = listaIncidencias.get(position).getEstado();
+        //Log.d("probando100", nombre);
+        //holder.textView1.setText(inci.getNombre());
+        //holder.textView2.setText(inci.getEstado());
+        //holder.incidencia = listaIncidencias.get(position);
+
+        holder.asignarDatos(listaIncidencias.get(position));
 
     }
 

@@ -50,14 +50,17 @@ public class InicioActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     //DatabaseReference databaseReference;
     private ArrayList<Incidencia> listaIncidencias = new ArrayList<>();
+    private Incidencia incidencia = new Incidencia();
     private String est;
     private String nombre;
     InicioListAdapter inicioListAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
+        //listaIncidencias = new ArrayList<> ();
 
 
         /*
@@ -106,9 +109,6 @@ public class InicioActivity extends AppCompatActivity {
             }
         });
 */
-
-
-
     }
 
 
@@ -142,8 +142,7 @@ public class InicioActivity extends AppCompatActivity {
                         listita.add(incidencia);
                     }
                 }
-
-
+                Log.d("TAG2222222",String.valueOf(listita.size()));
 
                 inicioListAdapter = new InicioListAdapter(listita,InicioActivity.this);
                 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
