@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,11 +14,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.proyectoappsgrupo2.R;
+import com.example.proyectoappsgrupo2.entity.Incidencia;
+import com.example.proyectoappsgrupo2.entity.Usuario;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +38,9 @@ public class RegistroActivity extends AppCompatActivity {
     private String correo;
     private String codigoPucp;
     private String contrasena;
+    private StorageReference storageReference;
+    private DatabaseReference databaseReference;
+    private Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +86,15 @@ public class RegistroActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
+                                //Se muestra el Toast
                                 Toast.makeText(RegistroActivity.this, "Registro exitoso. Revise su correo para verificar su cuenta", Toast.LENGTH_SHORT).show();
+
+                                //Se guarda el usuario en RealTime DataBase con su respectivo rol
+                                databaseReference = FirebaseDatabase.getInstance().getReference("Usuarios");
+                                Usuario usuario = new Usuario(firebaseAuth.getCurrentUser().getUid(), Integer.parseInt(codigoPucp), correo, "miembro-pucp");
+                                databaseReference.child(firebaseAuth.getCurrentUser().getUid()).setValue(usuario);
+
+                                //Se redirige al Login
                                 startActivity(new Intent(RegistroActivity.this, LoginActivity.class));
                             } else {
                                 Toast.makeText(RegistroActivity.this, "Ocurrió un error en el envío de correo", Toast.LENGTH_SHORT).show();
