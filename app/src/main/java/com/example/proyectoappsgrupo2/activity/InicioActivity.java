@@ -42,7 +42,6 @@ public class InicioActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     //DatabaseReference databaseReference;
     private ArrayList<Incidencia> listaIncidencias = new ArrayList<>();
-
     private Incidencia incidencia = new Incidencia();
     private String est;
     private String nombre;
@@ -124,15 +123,18 @@ public class InicioActivity extends AppCompatActivity {
                 for (DataSnapshot keyId : dataSnapshot.getChildren()){
 
                     if(keyId.child("autor").getValue().equals("R3MpfReFycYfKhncOwdU96hwmA22")){
+                        Incidencia incidencia = new Incidencia();
                         nombre = keyId.child("nombre").getValue(String.class);
                         est = keyId.child("estado").getValue(String.class);
 
                         incidencia.setNombre(nombre);
                         incidencia.setEstado(est);
+                        Log.d("GREYS ANATOMY SEASON 17", nombre);
                         listita.add(incidencia);
                     }
                 }
                 Log.d("TAG2222222",String.valueOf(listita.size()));
+
                 inicioListAdapter = new InicioListAdapter(listita,InicioActivity.this);
                 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
