@@ -2,10 +2,12 @@ package com.example.proyectoappsgrupo2.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import com.example.proyectoappsgrupo2.R;
 import com.example.proyectoappsgrupo2.entity.Incidencia;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.InicioViewHolder> {
 
@@ -22,24 +25,27 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
     private Context context;
 
     public InicioListAdapter(ArrayList<Incidencia> incidenciaData, Context context){
+        Log.d("TAGGGG", "adapter initialized");
         this.listaIncidencias = incidenciaData;
         this.context = context;
+
     }
 
     public static class InicioViewHolder extends RecyclerView.ViewHolder {
         public TextView textView1;
         public TextView textView2;
-        public Button verMasDetallesRV;
+        public ImageButton verMasDetallesRV;
         public Incidencia incidencia;
         Context context;
 
-        public InicioViewHolder(@NonNull View itemView, final Context context) {
+        public InicioViewHolder(View itemView, final Context context ) {
             super(itemView);
             this.context= context;
             this.textView1 = itemView.findViewById(R.id.nombreIncidenciaRV);
             this.textView2 = itemView.findViewById(R.id.estadoRV);
             this.verMasDetallesRV =itemView.findViewById(R.id.verMasDetallesRV);
 
+/*
             try{
                 verMasDetallesRV.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -57,16 +63,20 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
             }catch (NullPointerException exception){
 
             }
-
+*/
         }
     }
 
     @NonNull
     @Override
     public InicioViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        Log.d("TAG2222222", "onCreateViewHolder: inside");
+
         View itemView = LayoutInflater.from(context).inflate(R.layout.lista_incidenciasrv, parent, false);
-        InicioViewHolder inicioViewHolder = new InicioViewHolder(itemView, context);
+        InicioViewHolder inicioViewHolder = new InicioViewHolder(itemView,context);
         return inicioViewHolder;
+
 
     }
 
@@ -74,7 +84,7 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
     public void onBindViewHolder(@NonNull InicioViewHolder holder, int position) {
         String nombre = listaIncidencias.get(position).getNombre();
         String estado = listaIncidencias.get(position).getEstado();
-
+        Log.d("probando100", nombre);
         holder.textView1.setText(nombre);
         holder.textView2.setText(estado);
         holder.incidencia = listaIncidencias.get(position);
@@ -83,7 +93,11 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
 
     @Override
     public int getItemCount() {
-        return listaIncidencias.size();
+        if (listaIncidencias != null){
+            return listaIncidencias.size();
+        } else {
+            return 0;
+        }
     }
 
 

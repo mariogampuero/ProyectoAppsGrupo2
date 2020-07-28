@@ -2,6 +2,7 @@ package com.example.proyectoappsgrupo2.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -38,13 +39,20 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class InicioActivity extends AppCompatActivity {
 
     private Menu menu;
     FirebaseAuth firebaseAuth;
-    DatabaseReference databaseReference;
+    //DatabaseReference databaseReference;
+    private ArrayList<Incidencia> listaIncidencias = new ArrayList<>();
+    private String est;
+    private String nombre;
+    InicioListAdapter inicioListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +62,8 @@ public class InicioActivity extends AppCompatActivity {
 
         /*
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        mostrarIncidencias();
+
         databaseReference.child("Incidencias").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -95,8 +105,60 @@ public class InicioActivity extends AppCompatActivity {
 
             }
         });
+*/
 
-         */
+
+
+    }
+
+
+
+
+
+    public void mostrarIncidencias (){
+        DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+        DatabaseReference incidenciaRef = FirebaseDatabase.getInstance().getReference().child("Incidencias");
+        //databaseReference = FirebaseDatabase.getInstance().getReference();
+
+
+        incidenciaRef.addValueEventListener(new ValueEventListener() {
+            String title,descrip,aut;
+            int state;
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<Incidencia> listita = new ArrayList<>();
+
+                for (DataSnapshot keyId : dataSnapshot.getChildren()){
+
+                    if(keyId.child("autor").getValue().equals("R3MpfReFycYfKhncOwdU96hwmA22")){
+                        Incidencia incidencia = new Incidencia();
+                        nombre = keyId.child("nombre").getValue(String.class);
+                        est = keyId.child("estado").getValue(String.class);
+
+                        incidencia.setNombre(nombre);
+                        incidencia.setEstado(est);
+                        Log.d("GREYS ANATOMY SEASON 17", nombre);
+                        listita.add(incidencia);
+                    }
+                }
+
+
+
+                inicioListAdapter = new InicioListAdapter(listita,InicioActivity.this);
+                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(InicioActivity.this));
+                recyclerView.setAdapter(inicioListAdapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
 
     }
