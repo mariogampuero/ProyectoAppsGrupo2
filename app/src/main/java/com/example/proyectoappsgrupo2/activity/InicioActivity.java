@@ -135,7 +135,7 @@ public class InicioActivity extends AppCompatActivity {
                 }
 
                 inicioListAdapter = new InicioListAdapter(listita,InicioActivity.this);
-                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewInicio);
+                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(InicioActivity.this));
                 recyclerView.setAdapter(inicioListAdapter);
