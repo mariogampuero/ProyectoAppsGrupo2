@@ -26,12 +26,18 @@
 
 
 
-        <activity android:name=".activity.RegistroActivity"/>
-        <activity android:name=".activity.DetallesIncidenciaActivity" />
-        <activity android:name=".activity.NuevaIncidenciaActivity"/>
-        <activity android:name=".activity.InicioActivity"/>
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.RegistroActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.DetallesIncidenciaActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.NuevaIncidenciaActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.InicioActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

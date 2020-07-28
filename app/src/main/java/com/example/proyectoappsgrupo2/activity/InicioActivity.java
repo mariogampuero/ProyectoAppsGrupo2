@@ -1,11 +1,15 @@
 package com.example.proyectoappsgrupo2.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.android.volley.Response;
 import com.example.proyectoappsgrupo2.MainActivity;
@@ -26,6 +33,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ThrowOnExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
@@ -54,10 +62,11 @@ public class InicioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inicio);
         //listaIncidencias = new ArrayList<> ();
 
+
+        /*
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         mostrarIncidencias();
 
-
-/*
         databaseReference.child("Incidencias").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -158,6 +167,7 @@ public class InicioActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.appbarinicio,menu);
         /*firebaseAuth = FirebaseAuth.getInstance();
         this.menu.findItem(R.id.usernameInicio).setTitle(firebaseAuth.getCurrentUser().getEmail());*/
+
         return true;
     }
 
@@ -166,9 +176,8 @@ public class InicioActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.cerrarSesion) {
-            FirebaseAuth.getInstance().signOut();
-            Toast.makeText(InicioActivity.this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(InicioActivity.this, MainActivity.class));
+
+            desplegarCerrarSession();
             return true;
         }
 
@@ -179,6 +188,30 @@ public class InicioActivity extends AppCompatActivity {
     public void botonAñadirIncidencia(MenuItem menu){
         Intent i = new Intent(this, NuevaIncidenciaActivity.class);
         startActivity(i);
+    }
+
+
+    public void desplegarCerrarSession(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("¿Esta seguro que quiere cerrar sesión?");
+        alertDialog.setMessage("Esta a punto de salir de la aplicación");
+        alertDialog.setPositiveButton("CERRAR SESIÓN",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(InicioActivity.this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(InicioActivity.this, MainActivity.class));
+                    }
+                });
+        alertDialog.setNegativeButton("REGRESAR",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("msgAlerta", "Negativo");
+                    }
+                });
+        alertDialog.show();
     }
 
 }
