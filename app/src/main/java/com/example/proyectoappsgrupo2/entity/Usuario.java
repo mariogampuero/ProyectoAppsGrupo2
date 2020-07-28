@@ -2,9 +2,18 @@ package com.example.proyectoappsgrupo2.entity;
 
 public class Usuario {
 
+    private int uid;
     private Integer codigo;
     private String correo;
-    private String password;
+    private String rol;
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
 
     public Integer getCodigo() {
         return codigo;
@@ -22,11 +31,11 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRol() {
+        return rol;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }
