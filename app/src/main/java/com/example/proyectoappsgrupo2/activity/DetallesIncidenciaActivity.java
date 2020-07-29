@@ -212,6 +212,6 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
     }
-
+    
 
 }
