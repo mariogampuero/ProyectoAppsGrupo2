@@ -4,14 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/agregarIncidencia"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/aniadirblanco"
         android:onClick="botonAñadirIncidencia"
         android:orderInCategory="1"
         android:title="Item"
         app:showAsAction="always" />
     <item
         android:id="@+id/cerrarSesion"
-        android:icon="@android:drawable/ic_lock_power_off"
+        android:icon="@drawable/cerrarsesionblanco"
         android:orderInCategory="2"
         android:title="Item"
         app:showAsAction="always" />
