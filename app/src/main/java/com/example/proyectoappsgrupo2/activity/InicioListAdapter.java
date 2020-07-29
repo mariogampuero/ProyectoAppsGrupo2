@@ -66,6 +66,9 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
                         Intent intent = new Intent(context, DetallesIncidenciaActivity.class);
                         // intent.putExtra("nombre",incidencia.getNombre());
                         intent.putExtra("idIncidencia",incidencia.getDescripcion());
+                        intent.putExtra("lat", incidencia.getLatitud());
+                        intent.putExtra("lon", incidencia.getLongitud());
+
                   /*      intent.putExtra("autor",incidencia.getAutor());
                         intent.putExtra("estado",incidencia.getEstado());
                         intent.putExtra("latitud", incidencia.getLatitud());
