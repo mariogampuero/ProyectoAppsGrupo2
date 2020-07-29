@@ -49,7 +49,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
     private TextView tituloComentario;
     private ImageView imagenDetalles;
     private EditText comentarioEditText;
-    private Button guardarInfra;
+    private Button guardarInfraBtn;
     private static final String INCIDENCIAS = "Incidencias";
     private StorageReference storageReference;
     FirebaseAuth firebaseAuth;
@@ -85,6 +85,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         comentario = (TextView) findViewById(R.id.comentario);
         tituloComentario =  (TextView) findViewById(R.id.textView14);
         comentarioEditText = findViewById(R.id.comentarioPlain);
+        guardarInfraBtn = findViewById(R.id.guardarInfra);
 
         String compareValue = "Estado";
         if (compareValue != null) {
@@ -140,7 +141,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                     public void onDataChange(@NonNull DataSnapshot dataSnapshotUsuario) {
 
                         for (DataSnapshot keyId : dataSnapshotUsuario.getChildren()){
-                            if(keyId.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
+                            if(keyId.getKey().equals(aut)){
                                 rol = keyId.child("rol").getValue(String.class);
                                 correo = keyId.child("correo").getValue(String.class);
                                 codigo = keyId.child("codigo").getValue(Integer.class);
@@ -182,6 +183,8 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         StorageReference fotoRef = storageReference.child("fotos/"+idIncidencia);
         Glide.with(this).load(fotoRef).into(imagenDetalles);
 
+        //LISTENER DEL BOTÓN DE GUARDAR CAMBIOS
+        //guardarInfraBtn.setOnClickListener();
     }
 
     @Override
@@ -208,10 +211,6 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         map.addMarker(new MarkerOptions().position(latLng).title("Incidencia 1"));
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
-    }
-
-    public void guardarCambiosInfra(){
-
     }
 
 
