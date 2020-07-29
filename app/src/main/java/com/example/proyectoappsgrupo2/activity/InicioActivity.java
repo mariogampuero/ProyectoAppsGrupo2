@@ -49,8 +49,8 @@ public class InicioActivity extends AppCompatActivity {
     private Menu menu;
     FirebaseAuth firebaseAuth;
     //DatabaseReference databaseReference;
-    //private ArrayList<Incidencia> listaIncidencias = new ArrayList<>();
-    //private Incidencia incidencia = new Incidencia();
+
+
     private String est;
     private String nombre;
     InicioListAdapter inicioListAdapter;
