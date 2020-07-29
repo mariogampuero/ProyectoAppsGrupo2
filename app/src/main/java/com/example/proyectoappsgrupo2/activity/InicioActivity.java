@@ -65,44 +65,62 @@ public class InicioActivity extends AppCompatActivity {
     }
 
     public void mostrarIncidencias(){
-        DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
-        DatabaseReference incidenciaRef = FirebaseDatabase.getInstance().getReference().child("Incidencias");
-        //databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        DatabaseReference incidenciaRef = FirebaseDatabase.getInstance().getReference().child("Incidencias");
 
         incidenciaRef.addValueEventListener(new ValueEventListener() {
-            String title,descrip,aut;
-            int state;
 
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<Incidencia> listita = new ArrayList<>();
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshotIncidencia) {
+                DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+                usuarioRef.addValueEventListener(new ValueEventListener() {
+                    String rol;
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshotUsuario) {
+                        for (DataSnapshot keyId : dataSnapshotUsuario.getChildren()){
+                            if(keyId.child("uid").getValue().equals(firebaseAuth.getCurrentUser().getUid())){
+                                rol = keyId.child("rol").getValue(String.class);
+                                break;
+                            }
+                        }
 
-                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                    if(keyId.child("autor").getValue().equals(firebaseAuth.getCurrentUser().getUid())){
-                        Incidencia incidencia = new Incidencia();
-                        nombre = keyId.child("nombre").getValue(String.class);
-                        est = keyId.child("estado").getValue(String.class);
-                        key = keyId.getKey();
-                        lat = keyId.child("latitud").getValue(Double.class);
-                        lon = keyId.child("longitud").getValue(Double.class);
+                        ArrayList<Incidencia> listita = new ArrayList<>();
 
-                        Log.d("TAG",key);
-                        incidencia.setDescripcion(key);
-                        Log.d("TAG",incidencia.getDescripcion());
-                        incidencia.setNombre(nombre);
-                        incidencia.setEstado(est);
-                        incidencia.setLatitud(lat);
-                        incidencia.setLongitud(lon);
-                        listita.add(incidencia);
+                        for (DataSnapshot keyId : dataSnapshotIncidencia.getChildren()){
+                            Incidencia incidencia = new Incidencia();
+                            nombre = keyId.child("nombre").getValue(String.class);
+                            est = keyId.child("estado").getValue(String.class);
+                            key = keyId.getKey();
+                            lat = keyId.child("latitud").getValue(Double.class);
+                            lon = keyId.child("longitud").getValue(Double.class);
+                            incidencia.setDescripcion(key);
+                            incidencia.setNombre(nombre);
+                            incidencia.setEstado(est);
+                            incidencia.setLatitud(lat);
+                            incidencia.setLongitud(lon);
+                            if(rol == "miembro-pucp"){
+                                if(keyId.child("autor").getValue().equals(firebaseAuth.getCurrentUser().getUid())){
+                                    listita.add(incidencia);
+                                }
+                            } else {
+                                listita.add(incidencia);
+                            }
+
+                        }
+
+                        inicioListAdapter = new InicioListAdapter(listita,InicioActivity.this);
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(InicioActivity.this));
+                        recyclerView.setAdapter(inicioListAdapter);
+
                     }
-                }
 
-                inicioListAdapter = new InicioListAdapter(listita,InicioActivity.this);
-                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(InicioActivity.this));
-                recyclerView.setAdapter(inicioListAdapter);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
             }
 
