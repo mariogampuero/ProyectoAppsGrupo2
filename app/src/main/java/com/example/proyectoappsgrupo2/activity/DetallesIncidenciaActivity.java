@@ -1,7 +1,6 @@
 package com.example.proyectoappsgrupo2.activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
@@ -9,7 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -37,8 +38,10 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
     private String idIncidencia;
     private TextView tituloDetalles;
     private TextView descripcionDetalles;
-    private TextView estadoDetalles;
+    private Spinner estadoDetalles;
     private TextView autorDetalles;
+    private TextView autorCodigo;
+    private TextView autorCorreo;
     private ImageView imagenDetalles;
     private static final String INCIDENCIAS = "Incidencias";
     private StorageReference storageReference;
@@ -63,8 +66,14 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
         tituloDetalles = findViewById(R.id.titleDetalles);
         descripcionDetalles = findViewById(R.id.descripDetalles);
+
+        String[] lista = {"Pendiente","Atendido"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(DetallesIncidenciaActivity.this,
+                android.R.layout.simple_spinner_dropdown_item,lista);
         estadoDetalles = findViewById(R.id.estadoDetalles);
+        estadoDetalles.setAdapter(adapter);
         autorDetalles = findViewById(R.id.autorDetalles);
+        autorCodigo= findViewById(R.id.autorCodigo);
         imagenDetalles = findViewById(R.id.imageDetalles);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -96,20 +105,23 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
                 tituloDetalles.setText(title);
                 descripcionDetalles.setText(descrip);
-                estadoDetalles.setText(state);
+                //estadoDetalles.setText(state);
 
                 DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
                 usuarioRef.addValueEventListener(new ValueEventListener() {
                     String correo;
+                    Integer codigo;
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot keyId : dataSnapshot.getChildren()){
                             if(keyId.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
                                 correo = keyId.child("correo").getValue(String.class);
+                                codigo = keyId.child("codigo").getValue(Integer.class);
                                 break;
                             }
                         }
                         autorDetalles.setText(correo);
+                        autorCodigo.setText(codigo.toString());
                     }
 
                     @Override
@@ -163,6 +175,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.appbardetallesincidencia, menu);
         return true;
     }
