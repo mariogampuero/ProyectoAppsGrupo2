@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -63,11 +64,13 @@ public class NuevaIncidenciaActivity extends FragmentActivity implements OnMapRe
     private Button btnSubirIncidencia;
     private Uri uri;
     private LatLng latLng;
+    FirebaseAuth firebaseAuth;
 
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.appbarnuevaincidencia,menu);
         return true;
     }
@@ -76,6 +79,8 @@ public class NuevaIncidenciaActivity extends FragmentActivity implements OnMapRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_incidencia);
+        firebaseAuth = FirebaseAuth.getInstance();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

@@ -4,13 +4,8 @@
     <item
         android:icon="@drawable/abc_vector_test"
         android:onClick="botonAtrasAppBar"
-        android:orderInCategory="0"
-        android:title="Item"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/username"
         android:orderInCategory="1"
-        android:title="username"
+        android:title="Item"
         app:showAsAction="always" />
 
 </menu>

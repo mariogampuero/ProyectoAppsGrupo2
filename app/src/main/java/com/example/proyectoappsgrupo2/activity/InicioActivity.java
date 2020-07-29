@@ -137,6 +137,7 @@ public class InicioActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.appbarinicio,menu);
+        getSupportActionBar().setTitle(firebaseAuth.getCurrentUser().getEmail());
         /*firebaseAuth = FirebaseAuth.getInstance();
         this.menu.findItem(R.id.usernameInicio).setTitle(firebaseAuth.getCurrentUser().getEmail());*/
 
@@ -146,6 +147,7 @@ public class InicioActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
 
         if (id == R.id.cerrarSesion) {
 
