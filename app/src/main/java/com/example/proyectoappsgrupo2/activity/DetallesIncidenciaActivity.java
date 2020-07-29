@@ -212,6 +212,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
     public void guardarCambiosInfra(){
 
+        Log.d("Hola","Amixs");
     }
 
 
