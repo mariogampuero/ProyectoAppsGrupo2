@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,7 +45,11 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
     private TextView autorDetalles;
     private TextView autorCodigo;
     private TextView autorCorreo;
+    private TextView comentario;
+    private TextView tituloComentario;
     private ImageView imagenDetalles;
+    private EditText comentarioEditText;
+    private Button guardarInfraBtn;
     private static final String INCIDENCIAS = "Incidencias";
     private StorageReference storageReference;
     FirebaseAuth firebaseAuth;
@@ -75,6 +82,16 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         autorDetalles = findViewById(R.id.autorDetalles);
         autorCodigo= findViewById(R.id.autorCodigo);
         imagenDetalles = findViewById(R.id.imageDetalles);
+        comentario = (TextView) findViewById(R.id.comentario);
+        tituloComentario =  (TextView) findViewById(R.id.textView14);
+        comentarioEditText = findViewById(R.id.comentarioPlain);
+        guardarInfraBtn = findViewById(R.id.guardarInfra);
+
+        String compareValue = "Estado";
+        if (compareValue != null) {
+            int spinnerPosition = adapter.getPosition(compareValue);
+            estadoDetalles.setSelection(spinnerPosition);
+        }
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -83,45 +100,72 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         //SE OBTIENEN LOS DATOS DE LA INCIDENCIA
 
         incidenciaRef.addValueEventListener(new ValueEventListener() {
-            String title,descrip,aut;
+            String title,descrip,aut,estado,comentarioStr;
             String state;
             Double lat;
             Double lon;
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshotIncidencia) {
 
-               for (DataSnapshot keyId : dataSnapshot.getChildren()){
+               for (DataSnapshot keyId : dataSnapshotIncidencia.getChildren()){
                     if(keyId.getKey().equals(idIncidencia)){
-                        Log.d("probando", "uwu");
                         title = keyId.child("nombre").getValue(String.class);
                         descrip = keyId.child("descripcion").getValue(String.class);
                         aut = keyId.child("autor").getValue(String.class);
                         state = keyId.child("estado").getValue(String.class);
                         lat = keyId.child("latitud").getValue(Double.class);
                         lon = keyId.child("longitud").getValue(Double.class);
+                        estado = keyId.child("estado").getValue(String.class);
+                        comentarioStr = keyId.child("comentario").getValue(String.class);
                         break;
                     }
                }
+               if(!estado.equals("pendiente")){
+                   estadoDetalles.setSelection(1);
+               }
 
-                tituloDetalles.setText(title);
-                descripcionDetalles.setText(descrip);
-                //estadoDetalles.setText(state);
+               tituloDetalles.setText(title);
+               descripcionDetalles.setText(descrip);
+               if(comentarioStr != null){
+                   comentario.setText(comentarioStr);
+                   comentarioEditText.setText(comentarioStr);
+               }
+
+                //SE OBTIENE EL ROL DEL USUARIO
 
                 DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
                 usuarioRef.addValueEventListener(new ValueEventListener() {
-                    String correo;
+                    String rol, correo;
                     Integer codigo;
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot keyId : dataSnapshot.getChildren()){
+
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshotUsuario) {
+
+                        for (DataSnapshot keyId : dataSnapshotUsuario.getChildren()){
                             if(keyId.getKey().equals(aut)){
+                                rol = keyId.child("rol").getValue(String.class);
+
                                 correo = keyId.child("correo").getValue(String.class);
                                 codigo = keyId.child("codigo").getValue(Integer.class);
                                 break;
                             }
                         }
+
                         autorDetalles.setText(correo);
                         autorCodigo.setText(codigo.toString());
+
+                        if(rol.equals("miembro-pucp")){
+                            comentarioEditText.setVisibility(View.GONE);
+                            estadoDetalles.setEnabled(false);
+                            estadoDetalles.setClickable(false);
+                            autorDetalles.setText(correo);
+                            autorCodigo.setText(codigo.toString());
+                            if(comentarioStr == null){
+                                tituloComentario.setVisibility(View.GONE);
+                            }
+                        } else {
+                            comentario.setVisibility(View.GONE);
+                        }
                     }
 
                     @Override
@@ -141,36 +185,8 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         StorageReference fotoRef = storageReference.child("fotos/"+idIncidencia);
         Glide.with(this).load(fotoRef).into(imagenDetalles);
 
-        //SE OBTIENE EL ROL DEL USUARIO
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Usuarios");
-        /*databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                    if(keyId.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
-                        Log.d("probando", "uwu");
-
-                        title = keyId.child("nombre").getValue(String.class);
-                        descrip = keyId.child("descripcion").getValue(String.class);
-                        aut = keyId.child("autor").getValue(String.class);
-                        state = keyId.child("estado").getValue(String.class);
-                        break;
-                    }
-                }
-
-                tituloDetalles.setText(title);
-                descripcionDetalles.setText(descrip);
-                autorDetalles.setText(aut);
-                estadoDetalles.setText(state);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });*/
+        //LISTENER DEL BOTÓN DE GUARDAR CAMBIOS
+        //guardarInfraBtn.setOnClickListener();
     }
 
     @Override
@@ -197,7 +213,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         map.addMarker(new MarkerOptions().position(latLng).title("Incidencia 1"));
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
-
-
     }
+    
+
 }
