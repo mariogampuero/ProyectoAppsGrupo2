@@ -56,6 +56,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
     private static final String INCIDENCIAS = "Incidencias";
     private StorageReference storageReference;
     FirebaseAuth firebaseAuth;
+    String rolUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,15 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 nuevoEstado = estadoDetalles.getSelectedItem().toString();
+                if (nuevoEstado.equals("Pendiente")){
+                    comentarioEditText.setVisibility(View.GONE);
+                    tituloComentario.setVisibility(View.GONE);
+                } else if (nuevoEstado.equals("Atendido")){
+                    if(!rolUsuario.equals("miembro-pucp")){
+                        comentarioEditText.setVisibility(View.VISIBLE);
+                        tituloComentario.setVisibility(View.VISIBLE);
+                    }
+                }
             }
 
             @Override
@@ -184,6 +194,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                         for (DataSnapshot keyId : dataSnapshotUsuario.getChildren()){
                             if(keyId.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
                                 rol = keyId.child("rol").getValue(String.class);
+                                rolUsuario = rol;
                                 break;
                             }
                         }
@@ -198,7 +209,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                             estadoDetalles.setClickable(false);
                             autorDetalles.setText(correo);
                             autorCodigo.setText(codigo.toString());
-                            if(comentarioStr == null){
+                            if(comentarioStr == ""){
                                 tituloComentario.setVisibility(View.GONE);
                                 comentario.setVisibility(View.GONE);
                             }
