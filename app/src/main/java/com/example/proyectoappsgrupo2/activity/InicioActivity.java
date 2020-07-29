@@ -103,6 +103,7 @@ public class InicioActivity extends AppCompatActivity {
                             if(rol.equals("miembro-pucp")){
                                 if(keyId.child("autor").getValue(String.class).equals(firebaseAuth.getCurrentUser().getUid())){
                                     listita.add(incidencia);
+
                                 }
                             } else {
                                 listita.add(incidencia);
@@ -137,9 +138,35 @@ public class InicioActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.appbarinicio,menu);
-        getSupportActionBar().setTitle(firebaseAuth.getCurrentUser().getEmail());
+    public boolean onCreateOptionsMenu(final Menu menu){
+        DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+        usuarioRef.addValueEventListener(new ValueEventListener() {
+            String rol;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshotUsuario) {
+                for (DataSnapshot keyId : dataSnapshotUsuario.getChildren()){
+                    if(keyId.child("uid").getValue(String.class).equals(firebaseAuth.getCurrentUser().getUid())){
+                        rol = keyId.child("rol").getValue(String.class);
+                        break;
+                    }
+                }
+                if(rol.equals("miembro-pucp")){
+                    getMenuInflater().inflate(R.menu.appbarinicio,menu);
+                    getSupportActionBar().setTitle(firebaseAuth.getCurrentUser().getEmail());
+                } else {
+                    getMenuInflater().inflate(R.menu.appbarinicioadmin,menu);
+                    getSupportActionBar().setTitle(firebaseAuth.getCurrentUser().getEmail());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //getMenuInflater().inflate(R.menu.appbarinicio,menu);
+        //getSupportActionBar().setTitle(firebaseAuth.getCurrentUser().getEmail());
         /*firebaseAuth = FirebaseAuth.getInstance();
         this.menu.findItem(R.id.usernameInicio).setTitle(firebaseAuth.getCurrentUser().getEmail());*/
 
