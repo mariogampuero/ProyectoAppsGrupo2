@@ -50,6 +50,7 @@ public class InicioActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     private String est;
     private String nombre;
+    private String key;
     InicioListAdapter inicioListAdapter;
 
 
@@ -80,7 +81,11 @@ public class InicioActivity extends AppCompatActivity {
                         Incidencia incidencia = new Incidencia();
                         nombre = keyId.child("nombre").getValue(String.class);
                         est = keyId.child("estado").getValue(String.class);
+                        key = keyId.getKey();
 
+                        Log.d("TAG",key);
+                        incidencia.setDescripcion(key);
+                        Log.d("TAG",incidencia.getDescripcion());
                         incidencia.setNombre(nombre);
                         incidencia.setEstado(est);
                         listita.add(incidencia);

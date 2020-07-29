@@ -22,7 +22,7 @@ import java.util.List;
 public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.InicioViewHolder> {
 
     private ArrayList<Incidencia> listaIncidencias;
-    private Context context;
+    private static Context context;
 
     public InicioListAdapter(ArrayList<Incidencia> incidenciaData, Context context){
         Log.d("TAGGGG", "adapter initialized");
@@ -47,30 +47,35 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
             this.textView2 = itemView.findViewById(R.id.estadoRV);
             this.verMasDetallesRV =itemView.findViewById(R.id.verMasDetallesRV);
 
-/*        
+
+        }
+
+        public void asignarDatos(Incidencia incidencia) {
+            textView1.setText(incidencia.getNombre());
+            textView2.setText(incidencia.getEstado());
+        }
+
+        public void botonDetalles(final Incidencia incidencia) {
+
+
             try{
                 verMasDetallesRV.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Intent intent = new Intent(context, DetallesIncidenciaActivity.class);
-                        intent.putExtra("nombre",incidencia.getNombre());
-                        intent.putExtra("descripcion",incidencia.getDescripcion());
-                        intent.putExtra("autor",incidencia.getAutor());
+                        // intent.putExtra("nombre",incidencia.getNombre());
+                        intent.putExtra("idIncidencia",incidencia.getDescripcion());
+                  /*      intent.putExtra("autor",incidencia.getAutor());
                         intent.putExtra("estado",incidencia.getEstado());
                         intent.putExtra("latitud", incidencia.getLatitud());
-                        intent.putExtra("longitud",incidencia.getLongitud());
+                        intent.putExtra("longitud",incidencia.getLongitud());*/
                         context.startActivity(intent);
                     }
                 });
             }catch (NullPointerException exception){
 
             }
-*/
-        }
-
-        public void asignarDatos(Incidencia incidencia) {
-            textView1.setText(incidencia.getNombre());
-            textView2.setText(incidencia.getEstado());
         }
     }
 
@@ -101,6 +106,7 @@ public class InicioListAdapter extends RecyclerView.Adapter<InicioListAdapter.In
         //holder.incidencia = listaIncidencias.get(position);
 
         holder.asignarDatos(listaIncidencias.get(position));
+        holder.botonDetalles(listaIncidencias.get(position));
 
     }
 

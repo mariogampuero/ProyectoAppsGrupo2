@@ -80,6 +80,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                for (DataSnapshot keyId : dataSnapshot.getChildren()){
+
                    Log.d("probando89", "uwu");
                     if(keyId.getKey().equals(idIncidencia)){
                         Log.d("probando", "uwu");
@@ -116,10 +117,11 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                 for (DataSnapshot keyId : dataSnapshot.getChildren()){
                     if(keyId.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
                         Log.d("probando", "uwu");
+
                         title = keyId.child("nombre").getValue(String.class);
                         descrip = keyId.child("descripcion").getValue(String.class);
                         aut = keyId.child("autor").getValue(String.class);
-                        state = keyId.child("estado").getValue(Integer.class);
+                        state = keyId.child("estado").getValue(String.class);
                         break;
                     }
                 }
@@ -127,17 +129,14 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                 tituloDetalles.setText(title);
                 descripcionDetalles.setText(descrip);
                 autorDetalles.setText(aut);
-                if(state == 0){
-                    estadoDetalles.setText("Pendiente");
-                }else {
-                    estadoDetalles.setText("Atendido");
-                }
+                estadoDetalles.setText(state);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
         });*/
     }
 
