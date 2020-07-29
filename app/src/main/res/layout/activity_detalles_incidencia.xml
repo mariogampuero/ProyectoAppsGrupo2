@@ -55,9 +55,36 @@
             android:text="TextView"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/imageDetalles"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.037"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="63dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            android:text="Autor"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/descripDetalles" />
+
+        <TextView
+            android:id="@+id/autorCodigo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:gravity="left"
+            android:text="Codigo"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/imageDetalles"
+            app:layout_constraintHorizontal_bias="0.007"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/autorDetalles" />
 
         <TextView
             android:id="@+id/textView2"
@@ -72,21 +99,6 @@
             app:layout_constraintTop_toBottomOf="@+id/titleDetalles" />
 
         <TextView
-            android:id="@+id/autorCodigo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="15dp"
-            android:gravity="left"
-            android:text="Codigo"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/imageDetalles"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/autorDetalles" />
-
-        <TextView
             android:id="@+id/textView14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,7 +108,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/autorCodigo" />
+            app:layout_constraintTop_toBottomOf="@+id/estadoDetalles" />
 
         <TextView
             android:id="@+id/textView3"
@@ -108,7 +120,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/descripDetalles" />
+            app:layout_constraintTop_toBottomOf="@+id/autorCodigo" />
 
         <Spinner
             android:id="@+id/estadoDetalles"
@@ -122,18 +134,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="63dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="30dp"
-            android:text="Autor"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/estadoDetalles" />
 
         <TextView
             android:id="@+id/textView"
@@ -154,16 +154,13 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
-            android:layout_marginBottom="10dp"
             android:gravity="center|left"
             android:text="TextView"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/map"
             app:layout_constraintEnd_toStartOf="@+id/imageDetalles"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comentarioPlain"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/comentarioPlain" />
 
         <ImageView
             android:id="@+id/imageDetalles"
@@ -182,7 +179,7 @@
             android:layout_width="120dp"
             android:layout_height="40dp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
             android:ems="10"
             android:gravity="left"
@@ -201,6 +198,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/guardarInfra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:text="Guardar"
+            app:layout_constraintBottom_toTopOf="@+id/map"
+            app:layout_constraintEnd_toStartOf="@+id/imageDetalles"
+            app:layout_constraintHorizontal_bias="0.009"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/comentario"
+            app:layout_constraintVertical_bias="1.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
