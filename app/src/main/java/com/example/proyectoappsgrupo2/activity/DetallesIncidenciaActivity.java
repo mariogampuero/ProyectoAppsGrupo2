@@ -77,26 +77,47 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         incidenciaRef.addValueEventListener(new ValueEventListener() {
             String title,descrip,aut;
             String state;
+            Double lat;
+            Double lon;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-
-                   Log.d("probando89", "uwu");
                     if(keyId.getKey().equals(idIncidencia)){
                         Log.d("probando", "uwu");
                         title = keyId.child("nombre").getValue(String.class);
                         descrip = keyId.child("descripcion").getValue(String.class);
                         aut = keyId.child("autor").getValue(String.class);
                         state = keyId.child("estado").getValue(String.class);
+                        lat = keyId.child("latitud").getValue(Double.class);
+                        lon = keyId.child("longitud").getValue(Double.class);
                         break;
                     }
-                }
+               }
 
                 tituloDetalles.setText(title);
                 descripcionDetalles.setText(descrip);
-                autorDetalles.setText(aut);
                 estadoDetalles.setText(state);
+
+                DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+                usuarioRef.addValueEventListener(new ValueEventListener() {
+                    String correo;
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot keyId : dataSnapshot.getChildren()){
+                            if(keyId.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
+                                correo = keyId.child("correo").getValue(String.class);
+                                break;
+                            }
+                        }
+                        autorDetalles.setText(correo);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -156,8 +177,16 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        LatLng latLng = new LatLng(-12.060896, -77.041357);
+        Intent intent = getIntent();
+        /*String lat = intent.getStringExtra("lat");
+        String lon = intent.getStringExtra("lon");
+        LatLng latLng = new LatLng(Double.valueOf(lat), Double.valueOf(lon));
+        */
+        LatLng latLng = new LatLng(intent.getDoubleExtra("lat", 0), intent.getDoubleExtra("lon", 0));
         map.addMarker(new MarkerOptions().position(latLng).title("Incidencia 1"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
+
+
     }
 }

@@ -51,6 +51,8 @@ public class InicioActivity extends AppCompatActivity {
     private String est;
     private String nombre;
     private String key;
+    private Double lat;
+    private Double lon;
     InicioListAdapter inicioListAdapter;
 
 
@@ -82,12 +84,16 @@ public class InicioActivity extends AppCompatActivity {
                         nombre = keyId.child("nombre").getValue(String.class);
                         est = keyId.child("estado").getValue(String.class);
                         key = keyId.getKey();
+                        lat = keyId.child("latitud").getValue(Double.class);
+                        lon = keyId.child("longitud").getValue(Double.class);
 
                         Log.d("TAG",key);
                         incidencia.setDescripcion(key);
                         Log.d("TAG",incidencia.getDescripcion());
                         incidencia.setNombre(nombre);
                         incidencia.setEstado(est);
+                        incidencia.setLatitud(lat);
+                        incidencia.setLongitud(lon);
                         listita.add(incidencia);
                     }
                 }
