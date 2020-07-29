@@ -114,7 +114,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                            if(keyId.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
+                            if(keyId.getKey().equals(aut)){
                                 correo = keyId.child("correo").getValue(String.class);
                                 codigo = keyId.child("codigo").getValue(Integer.class);
                                 break;
