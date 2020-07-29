@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -29,7 +30,12 @@ import com.example.proyectoappsgrupo2.R;
 import com.example.proyectoappsgrupo2.entity.Incidencia;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,7 +49,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class NuevaIncidenciaActivity extends AppCompatActivity {
+public class NuevaIncidenciaActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    GoogleMap map;
 
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
@@ -68,6 +76,9 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_incidencia);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         titulo = (EditText) findViewById(R.id.titleIncidencia);
         descripcion = (EditText) findViewById(R.id.descripcionIncidencia);
@@ -76,7 +87,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
         btnUpload = (Button) findViewById(R.id.buttonFoto);
         img = (ImageView) findViewById(R.id.fotoIncidencia);
         btnSubirIncidencia = (Button) findViewById(R.id.buttonGuardarIncidencia);
-        Button btnAgregarGeolocalizacion = (Button) findViewById(R.id.buttonLocal);
+
 
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -120,27 +131,16 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
             }
         });
 
-        btnAgregarGeolocalizacion.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                obtenerUbicacion();
-            }
-        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-
         if (requestCode == GALLERY_INTENT && resultCode ==  RESULT_OK){
-
 
             uri = data.getData();
             img.setImageURI(uri);
-
-
         }
     }
 
@@ -157,14 +157,14 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
             }
         }
     }
-
-
     public void botonAtrasAppBar(MenuItem menu){
         Intent i = new Intent(this, InicioActivity.class);
         startActivity(i);
     }
 
-    public void obtenerUbicacion() {
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+
         int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
 
@@ -175,6 +175,11 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
                 public void onSuccess(Location location) {
                     if (location != null){
                         latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        map = googleMap;
+
+                        map.addMarker(new MarkerOptions().position(latLng).title("Incidencia 1"));
+                        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
                         Toast.makeText(NuevaIncidenciaActivity.this, "Se añadió la ubicación", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -191,6 +196,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+
     }
 
 
