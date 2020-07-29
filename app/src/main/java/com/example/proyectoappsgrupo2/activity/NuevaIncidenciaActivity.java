@@ -121,7 +121,7 @@ public class NuevaIncidenciaActivity extends FragmentActivity implements OnMapRe
                             String title = titulo.getText().toString().trim();
 
                             Toast.makeText(NuevaIncidenciaActivity.this, "Se subió la incidencia exitosamente", Toast.LENGTH_SHORT).show();
-                            Incidencia imageUploadInfo = new Incidencia(taskSnapshot.getUploadSessionUri().toString(), descri, title, autor, "pendiente", latLng.latitude, latLng.longitude);
+                            Incidencia imageUploadInfo = new Incidencia(taskSnapshot.getUploadSessionUri().toString(), descri, title, autor, "pendiente", latLng.latitude, latLng.longitude, "");
 
                             //String ImageUploadId = databaseReference.push().getKey();
                             databaseReference.child(ImageUploadId).setValue(imageUploadInfo);

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.proyectoappsgrupo2.MainActivity;
 import com.example.proyectoappsgrupo2.R;
+import com.example.proyectoappsgrupo2.entity.Incidencia;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,6 +52,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
     private ImageView imagenDetalles;
     private EditText comentarioEditText;
     private Button guardarInfraBtn;
+    private String nuevoEstado;
     private static final String INCIDENCIAS = "Incidencias";
     private StorageReference storageReference;
     FirebaseAuth firebaseAuth;
@@ -95,12 +98,27 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+
+        estadoDetalles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                nuevoEstado = estadoDetalles.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
         //DatabaseReference incidenciaRef = FirebaseDatabase.getInstance().getReference().child("Incidencias").child("-MCymkPcCpFWC30XrPA6");
 
         //SE OBTIENEN LOS DATOS DE LA INCIDENCIA
 
         incidenciaRef.addValueEventListener(new ValueEventListener() {
-            String title,descrip,aut,estado,comentarioStr;
+            String title,descrip,aut,comentarioStr,foto;
             String state;
             Double lat;
             Double lon;
@@ -115,21 +133,36 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                         state = keyId.child("estado").getValue(String.class);
                         lat = keyId.child("latitud").getValue(Double.class);
                         lon = keyId.child("longitud").getValue(Double.class);
-                        estado = keyId.child("estado").getValue(String.class);
                         comentarioStr = keyId.child("comentario").getValue(String.class);
+                        foto = keyId.child("foto").getValue(String.class);
                         break;
                     }
                }
-               if(!estado.equals("pendiente")){
+               if(!state.equals("pendiente")){
                    estadoDetalles.setSelection(1);
                }
 
                tituloDetalles.setText(title);
                descripcionDetalles.setText(descrip);
-               if(comentarioStr != null){
+               if(comentarioStr != ""){
                    comentario.setText(comentarioStr);
                    comentarioEditText.setText(comentarioStr);
                }
+
+                //LISTENER DEL BOTÓN DE GUARDAR CAMBIOS
+                guardarInfraBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Incidencias");
+                        Incidencia incidencia;
+                        if (nuevoEstado != null){
+                            incidencia = new Incidencia(foto, descrip, title, aut, nuevoEstado.toLowerCase(), lat, lon, comentarioEditText.getText().toString());
+                        } else {
+                            incidencia = new Incidencia(foto, descrip, title, aut, state, lat, lon, comentarioEditText.getText().toString());
+                        }
+                        databaseReference.child(idIncidencia).setValue(incidencia);
+                    }
+                });
 
                 //SE OBTIENE EL ROL DEL USUARIO
 
@@ -138,15 +171,19 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                     String rol, correo;
                     Integer codigo;
                     @Override
-
                     public void onDataChange(@NonNull DataSnapshot dataSnapshotUsuario) {
 
                         for (DataSnapshot keyId : dataSnapshotUsuario.getChildren()){
                             if(keyId.getKey().equals(aut)){
-                                rol = keyId.child("rol").getValue(String.class);
-
                                 correo = keyId.child("correo").getValue(String.class);
                                 codigo = keyId.child("codigo").getValue(Integer.class);
+                                break;
+                            }
+                        }
+
+                        for (DataSnapshot keyId : dataSnapshotUsuario.getChildren()){
+                            if(keyId.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
+                                rol = keyId.child("rol").getValue(String.class);
                                 break;
                             }
                         }
@@ -156,12 +193,14 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
                         if(rol.equals("miembro-pucp")){
                             comentarioEditText.setVisibility(View.GONE);
+                            guardarInfraBtn.setVisibility(View.GONE);
                             estadoDetalles.setEnabled(false);
                             estadoDetalles.setClickable(false);
                             autorDetalles.setText(correo);
                             autorCodigo.setText(codigo.toString());
                             if(comentarioStr == null){
                                 tituloComentario.setVisibility(View.GONE);
+                                comentario.setVisibility(View.GONE);
                             }
                         } else {
                             comentario.setVisibility(View.GONE);
@@ -185,8 +224,6 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         StorageReference fotoRef = storageReference.child("fotos/"+idIncidencia);
         Glide.with(this).load(fotoRef).into(imagenDetalles);
 
-        //LISTENER DEL BOTÓN DE GUARDAR CAMBIOS
-        //guardarInfraBtn.setOnClickListener();
     }
 
     @Override

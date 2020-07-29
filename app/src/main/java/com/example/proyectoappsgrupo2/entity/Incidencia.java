@@ -14,7 +14,8 @@ public class Incidencia {
 
     public Incidencia(){}
 
-    public Incidencia(String url, String desc, String nombre, String autor,String estado, double lat, double lon) {
+    public Incidencia(String url, String desc, String nombre, String autor,String estado,
+                      double lat, double lon, String comentario) {
         this.nombre = nombre;
         this.autor = autor;
         this.foto = url;
@@ -22,7 +23,7 @@ public class Incidencia {
         this.longitud = lon;
         this.descripcion = desc;
         this.estado = estado;
-       // this.comentario = comentario;
+        this.comentario = comentario;
     }
 
     public String getNombre() {
