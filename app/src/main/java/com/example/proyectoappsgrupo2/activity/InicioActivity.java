@@ -78,11 +78,13 @@ public class InicioActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshotUsuario) {
                         for (DataSnapshot keyId : dataSnapshotUsuario.getChildren()){
-                            if(keyId.child("uid").getValue().equals(firebaseAuth.getCurrentUser().getUid())){
+                            if(keyId.child("uid").getValue(String.class).equals(firebaseAuth.getCurrentUser().getUid())){
                                 rol = keyId.child("rol").getValue(String.class);
                                 break;
                             }
                         }
+
+                        Log.d("ROLLL", rol);
 
                         ArrayList<Incidencia> listita = new ArrayList<>();
 
@@ -98,8 +100,8 @@ public class InicioActivity extends AppCompatActivity {
                             incidencia.setEstado(est);
                             incidencia.setLatitud(lat);
                             incidencia.setLongitud(lon);
-                            if(rol == "miembro-pucp"){
-                                if(keyId.child("autor").getValue().equals(firebaseAuth.getCurrentUser().getUid())){
+                            if(rol.equals("miembro-pucp")){
+                                if(keyId.child("autor").getValue(String.class).equals(firebaseAuth.getCurrentUser().getUid())){
                                     listita.add(incidencia);
                                 }
                             } else {
