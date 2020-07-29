@@ -59,16 +59,17 @@ public class RegistroActivity extends AppCompatActivity {
                 codigoPucp = codigoPucpView.getText().toString();
                 contrasena = contrasenaView.getText().toString();
 
-                if (contrasena.isEmpty()){
-                    contrasenaView.setError("Ingrese una contraseña");
+                if (correo.isEmpty()){
+                    correoView.setError("ingrese un correo PUCP");
                 } else if (codigoPucp.isEmpty()){
                     codigoPucpView.setError("Ingrese un código PUCP");
-                } else if (correo.isEmpty()){
-                    correoView.setError("ingrese un correo PUCP");
+                } else if (contrasena.isEmpty()){
+                    contrasenaView.setError("Ingrese una contraseña");
+                } else if (codigoPucp.length() != 8){
+                    codigoPucpView.setError("El código PUCP no existe");
                 } else {
                     registrarUsuario();
                 }
-
             }
         });
 
