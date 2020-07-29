@@ -34,11 +34,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.InicioActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait">
-
+            android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity">
+                android:screenOrientation="portrait"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
