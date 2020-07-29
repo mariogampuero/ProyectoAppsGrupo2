@@ -48,11 +48,9 @@ public class InicioActivity extends AppCompatActivity {
 
     private Menu menu;
     FirebaseAuth firebaseAuth;
-    //DatabaseReference databaseReference;
-
-
     private String est;
     private String nombre;
+    private String key;
     InicioListAdapter inicioListAdapter;
 
 
@@ -60,62 +58,11 @@ public class InicioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-        //listaIncidencias = new ArrayList<> ();
-
-
-        /*
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
         mostrarIncidencias();
-
-        databaseReference.child("Incidencias").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
-                //Lista de Incidencias
-                final ArrayList<Incidencia> listaincidencias = new ArrayList<Incidencia>();
-
-                //Incidencia una por una
-                for (DataSnapshot child : dataSnapshot.getChildren()){
-                    Incidencia incidenciaIndividual = child.getValue(Incidencia.class);
-                    listaincidencias.add(incidenciaIndividual);
-                }
-
-                new Response.Listener<String>(){
-
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("no se", response);
-
-                        Gson gson = new Gson();
-                        DtoListaIncidencias dtoListaIncidencias = gson.fromJson(response,DtoListaIncidencias.class);
-
-                        ArrayList<Incidencia> lista =dtoListaIncidencias.getListaincidencias();
-
-                        InicioListAdapter adapter = new InicioListAdapter(listaincidencias,InicioActivity.this);
-
-                        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(InicioActivity.this));
-
-
-                    }
-                };
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-*/
     }
 
-
-
-
-
-    public void mostrarIncidencias (){
+    public void mostrarIncidencias(){
         DatabaseReference usuarioRef = FirebaseDatabase.getInstance().getReference().child("Usuarios");
         DatabaseReference incidenciaRef = FirebaseDatabase.getInstance().getReference().child("Incidencias");
         //databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -130,19 +77,20 @@ public class InicioActivity extends AppCompatActivity {
                 ArrayList<Incidencia> listita = new ArrayList<>();
 
                 for (DataSnapshot keyId : dataSnapshot.getChildren()){
-
-                    if(keyId.child("autor").getValue().equals("R3MpfReFycYfKhncOwdU96hwmA22")){
+                    if(keyId.child("autor").getValue().equals(firebaseAuth.getCurrentUser().getUid())){
                         Incidencia incidencia = new Incidencia();
                         nombre = keyId.child("nombre").getValue(String.class);
                         est = keyId.child("estado").getValue(String.class);
+                        key = keyId.getKey();
 
+                        Log.d("TAG",key);
+                        incidencia.setDescripcion(key);
+                        Log.d("TAG",incidencia.getDescripcion());
                         incidencia.setNombre(nombre);
                         incidencia.setEstado(est);
-                        Log.d("GREYS ANATOMY SEASON 17", nombre);
                         listita.add(incidencia);
                     }
                 }
-                Log.d("TAG2222222",String.valueOf(listita.size()));
 
                 inicioListAdapter = new InicioListAdapter(listita,InicioActivity.this);
                 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);

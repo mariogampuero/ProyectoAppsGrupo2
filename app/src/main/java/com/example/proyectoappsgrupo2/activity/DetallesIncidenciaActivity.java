@@ -53,6 +53,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
         Intent inte = getIntent();
         idIncidencia = inte.getStringExtra("idIncidencia");
+
         idPrueba = "-MCymkPcCpFWC30XrPA6";
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -69,18 +70,19 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
 
         incidenciaRef.addValueEventListener(new ValueEventListener() {
             String title,descrip,aut;
-            int state;
+            String state;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                for (DataSnapshot keyId : dataSnapshot.getChildren()){
-                   Log.d("probando89", "uwu");
-                    if(keyId.getKey().equals(idPrueba)){
-                        Log.d("probando", "uwu");
+                   //Log.d("probando89", "uwu");
+                   Log.d("ahhhhhhh funcionaaaa", idIncidencia);
+                    if(keyId.getKey().equals(idIncidencia)){
+                        //Log.d("probando", "uwu");
                         title = keyId.child("nombre").getValue(String.class);
                         descrip = keyId.child("descripcion").getValue(String.class);
                         aut = keyId.child("autor").getValue(String.class);
-                        state = keyId.child("estado").getValue(Integer.class);
+                        state = keyId.child("estado").getValue(String.class);
                         break;
                     }
                 }
@@ -94,11 +96,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
                 tituloDetalles.setText(title);
                 descripcionDetalles.setText(descrip);
                 autorDetalles.setText(aut);
-                if(state == 0){
-                    estadoDetalles.setText("Pendiente");
-                }else {
-                    estadoDetalles.setText("Atendido");
-                }
+                estadoDetalles.setText(state);
             }
 
             @Override
@@ -107,7 +105,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
             }
         });
 
-        StorageReference fotoRef = storageReference.child("fotos/"+idPrueba);
+        StorageReference fotoRef = storageReference.child("fotos/"+idIncidencia);
 
         Glide.with(this).load(fotoRef).into(imagenDetalles);
     }
