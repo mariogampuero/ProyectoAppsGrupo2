@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -55,12 +56,15 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
     private Button btnSubirIncidencia;
     private Uri uri;
     private LatLng latLng;
+    FirebaseAuth firebaseAuth;
 
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.appbarnuevaincidencia,menu);
+        getSupportActionBar().setTitle(firebaseAuth.getCurrentUser().getEmail());
         return true;
     }
 
@@ -68,6 +72,7 @@ public class NuevaIncidenciaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_incidencia);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         titulo = (EditText) findViewById(R.id.titleIncidencia);
         descripcion = (EditText) findViewById(R.id.descripcionIncidencia);
