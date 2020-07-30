@@ -55,6 +55,13 @@ public class InicioActivity extends AppCompatActivity {
     private Double lon;
     InicioListAdapter inicioListAdapter;
 
+    @Override
+    public void onBackPressed()
+    {
+
+        // super.onBackPressed(); // Comment this super call to avoid calling finish() or fragmentmanager's backstack pop operation.
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
