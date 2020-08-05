@@ -58,7 +58,6 @@ public class InicioActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
-
         // super.onBackPressed(); // Comment this super call to avoid calling finish() or fragmentmanager's backstack pop operation.
     }
 
