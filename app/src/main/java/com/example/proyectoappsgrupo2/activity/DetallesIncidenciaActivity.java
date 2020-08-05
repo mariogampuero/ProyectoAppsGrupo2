@@ -258,7 +258,7 @@ public class DetallesIncidenciaActivity extends FragmentActivity implements OnMa
         LatLng latLng = new LatLng(Double.valueOf(lat), Double.valueOf(lon));
         */
         LatLng latLng = new LatLng(intent.getDoubleExtra("lat", 0), intent.getDoubleExtra("lon", 0));
-        map.addMarker(new MarkerOptions().position(latLng).title("Incidencia 1"));
+        map.addMarker(new MarkerOptions().position(latLng).title("Ubicación incidencia"));
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
     }
