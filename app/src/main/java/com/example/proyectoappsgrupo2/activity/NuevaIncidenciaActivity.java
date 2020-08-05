@@ -182,7 +182,7 @@ public class NuevaIncidenciaActivity extends FragmentActivity implements OnMapRe
                         latLng = new LatLng(location.getLatitude(), location.getLongitude());
                         map = googleMap;
 
-                        map.addMarker(new MarkerOptions().position(latLng).title("Incidencia 1"));
+                        map.addMarker(new MarkerOptions().position(latLng).title("Ubicación seleccionada"));
                         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f));
                         Toast.makeText(NuevaIncidenciaActivity.this, "Se añadió la ubicación", Toast.LENGTH_SHORT).show();
